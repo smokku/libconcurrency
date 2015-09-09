@@ -11,7 +11,7 @@ so the achievable scalability is consequently much higher than State Threads, wh
 This library was inspired by Douglas W. Jones' ["minimal user-level thread package"](http://www.cs.uiowa.edu/~jones/opsys/threads/).
 The pseudo-platform-neutral probing algorithm on the svn trunk is derived from his code.
 
-There is also a [safer, more portable coroutine implementation based on stack copying](http://code.google.com/p/libconcurrency/source/browse/branches/copying-cache-stacks),
+There is also a [safer, more portable coroutine implementation based on stack copying](http://github.com/smokku/libconcurrency/tree/copying-cache-stacks),
 which was inspired by [sigfpe's page on portable continuations in C](http://homepage.mac.com/sigfpe/Computing/continuations.html).
 Copying is more portable and flexible than stack switching, and [making copying competitive with switching is being researched](http://higherlogics.blogspot.com/2008/07/coroutines-in-c-redux.html).
 
@@ -39,10 +39,10 @@ Features libconcurrency provides that are not found in [libcoro](http://software
 [libCoroutine](http://www.dekorte.com/projects/opensource/libCoroutine/docs/),
 [libpcl](http://www.xmailserver.org/libpcl.html), [coro](http://www.goron.de/~froese/coro/):
 
-*   **Cloning a coroutine:** this enables a straightforward implementation of multishot continuations. Without the ability to clone, only one-shot continuations can be implemented in terms of coroutines. Note, cloning is not available on Windows since Windows uses the Fibers API. This was necessary to handle [some unfortunate problems](http://higherlogics.blogspot.com/2008/07/coroutines-in-c-redux.html). The [more portable stack copying implementation does support cloning](http://code.google.com/p/libconcurrency/source/browse/branches/copying-cache-stacks).
+*   **Cloning a coroutine:** this enables a straightforward implementation of multishot continuations. Without the ability to clone, only one-shot continuations can be implemented in terms of coroutines. Note, cloning is not available on Windows since Windows uses the Fibers API. This was necessary to handle [some unfortunate problems](http://higherlogics.blogspot.com/2008/07/coroutines-in-c-redux.html). The [more portable stack copying implementation does support cloning](http://github.com/smokku/libconcurrency/tree/copying-cache-stacks).
 *   **Portable Speed:** libconcurrency is based on a portable technique that modifies <tt>jmp_buf</tt> and uses setjmp/longjmp to save and restore contexts. This is fast because setjmp/longjmp do not save and restore signals, whereas most other libraries are based on ucontext, which is very portable but inefficient, or assembler which is efficient but not portable. The library consists of entirely C99 compliant C and no exotic platform or OS features are used.
 *   **Actual coroutine API:** most of the listed libraries implement green threads, not coroutines. You'll note that no values are passed between coroutines in these libraries. Passing values between coroutines is one of the primary reasons why they are more general than threads.
-*   **[Simpler API](http://code.google.com/p/libconcurrency/source/browse/trunk/libconcurrency/coro.h):** the API consists of only 6 orthogonal functions: <tt>coro_init, coro_call, coro_clone, coro_poll, coro_free</tt>.
+*   **[Simpler API](libconcurrency/coro.h):** the API consists of only 6 orthogonal functions: <tt>coro_init, coro_call, coro_clone, coro_poll, coro_free</tt>.
 *   **Works on Windows:** libconcurrency is primarily developed on Windows, and uses Windows Fibers for coroutines.
 *   **Resources are managed:** the <tt>coro_poll</tt> function must be called periodically to ensure a coroutine has enough resources to continue executing. This function can shrink or grow the stack using a hysteresis algorithm inspired by the description of one-shot continuations in [Representing Control in the Presence of One-Shot Continuations](http://citeseer.ist.psu.edu/bruggeman96representing.html).
 
